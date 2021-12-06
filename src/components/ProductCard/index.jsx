@@ -13,7 +13,9 @@ function ProductCard(props) {
             hoverable
             cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
             actions={[
-                <ShoppingCartOutlined key='add_to_cart' />
+                <div>
+                    <ShoppingCartOutlined key='add_to_cart' /> Thêm vào giỏ hàng
+                </div>
             ]}
         // style={{ height: '200px' }}
         >

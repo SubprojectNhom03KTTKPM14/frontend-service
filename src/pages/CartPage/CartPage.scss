@@ -1,0 +1,14 @@
+#cart-page {
+    margin: 3rem auto;
+    max-width: 80%;
+
+    .cart_wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cart-button {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+}
