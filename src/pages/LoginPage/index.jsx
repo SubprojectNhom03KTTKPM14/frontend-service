@@ -1,5 +1,6 @@
-import { Button, Divider, Form, Input, Typography } from 'antd';
+import { Button, Divider, Form, Input, message, Typography } from 'antd';
 import React from 'react';
+import userApi from '../../api/userApi';
 import './LoginPage.scss';
 
 LoginPage.propTypes = {
@@ -9,13 +10,15 @@ LoginPage.propTypes = {
 function LoginPage(props) {
     const { Title } = Typography;
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
+    const onFinish = async ({ username, password }) => {
+        await userApi.login(username, password).then(({ accessToken }) => {
+            localStorage.setItem('accessToken', accessToken)
+        }).catch(() => {
+            message.error('has an error')
+        })
     };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+
 
     return (
         <div id='login-page'>
@@ -33,7 +36,7 @@ function LoginPage(props) {
                         remember: true,
                     }}
                     onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
+
                     autoComplete="off"
                 >
                     <Form.Item
@@ -43,8 +46,13 @@ function LoginPage(props) {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your username!',
+                                message: 'Username trống',
                             },
+                            {
+                                type: 'email',
+                                message: 'Email không hợp lệ',
+
+                            }
                         ]}
                     >
                         <Input />

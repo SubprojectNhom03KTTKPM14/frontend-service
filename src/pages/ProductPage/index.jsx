@@ -1,7 +1,8 @@
 import { Col, Row, Typography } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import FilterProduct from '../../components/FilterProduct';
 import ProductCard from '../../components/ProductCard';
+import { useSelector } from 'react-redux';
 import './ProductPage.scss';
 
 
@@ -12,10 +13,19 @@ ProductPage.propTypes = {
 
 function ProductPage(props) {
     const { Title } = Typography;
+    const { product } = useSelector(state => state.product)
+
+    useEffect(() => {
+
+
+    }, [])
+
+
+
     return (
         <div id='product-page'>
             <div className="product-page_title">
-                <Title level={1}>Danh sách sản phẩm</Title>
+                <Title level={1}>PRODUCTS</Title>
             </div>
 
             <div className="product-page_filter">

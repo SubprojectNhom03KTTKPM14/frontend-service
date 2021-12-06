@@ -28,17 +28,17 @@ function Header(props) {
             }}
         >
             <Menu.Item key="PRODUCT" icon={<ShopOutlined />}>
-                <Link to='/products' >Danh sách sản phẩm</Link>
+                <Link to='/products' >Products</Link>
             </Menu.Item>
             <Menu.Item key="CART" icon={<ShoppingCartOutlined />}>
-                <Link to='/cart' >Giỏ hàng</Link>
+                <Link to='/cart' >Cart</Link>
             </Menu.Item>
-            <SubMenu key="ACCOUNT" icon={<UserOutlined />} title="Tài khoản">
+            <SubMenu key="ACCOUNT" icon={<UserOutlined />} title="Account">
                 <Menu.Item key="LOGIN">
-                    <Link to='/account/login' >Đăng nhập</Link>
+                    <Link to='/account/login' >Login</Link>
                 </Menu.Item>
                 <Menu.Item key="REGISTRY">
-                    <Link to='/account/regisrty'>Đăng ký</Link>
+                    <Link to='/account/registry'>Registry</Link>
                 </Menu.Item>
             </SubMenu>
         </Menu>

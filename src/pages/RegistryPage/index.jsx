@@ -1,6 +1,8 @@
+import { Button, Divider, Form, Input, Modal, Typography, message } from 'antd';
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Button, Divider, Form, Input, Typography } from 'antd';
+import userApi from '../../api/userApi';
+import REGEX from '../../constant/regex';
+import { useNavigate } from 'react-router-dom';
 import './RegistryPage.scss';
 
 
@@ -11,19 +13,31 @@ RegistryPage.propTypes = {
 
 function RegistryPage(props) {
     const { Title } = Typography;
+    const navigate = useNavigate();
+    const pushToLogin = () => {
+        navigate('/account/login')
+    }
+    function success() {
+        Modal.success({
+            content: 'Register successed !',
+            onOk: pushToLogin,
+            onCancel: pushToLogin
+        });
+    }
+    const onFinish = async (values) => {
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
+        await userApi.registry(values).then(() => {
+            success()
+        }).catch(() => {
+            message.error('has an error');
+        });
     };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
 
     return (
         <div id='registry-page'>
             <div className="registry-form">
-                <Title level={2}>Đăng Ký</Title>
+                <Title level={2}>REGISTRY</Title>
                 <Divider />
 
                 <Form
@@ -36,9 +50,23 @@ function RegistryPage(props) {
                         remember: true,
                     }}
                     onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
                     autoComplete="off"
                 >
+                    <Form.Item
+                        label="Name"
+                        name="name"
+
+                        rules={[
+                            {
+                                required: true,
+                                pattern: new RegExp(REGEX.USER),
+                                message: "Name is not valid "
+                            }
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+
                     <Form.Item
                         label="Email"
                         name="email"
@@ -48,6 +76,9 @@ function RegistryPage(props) {
                                 required: true,
                                 message: 'Please input your email!',
                             },
+                            {
+                                type: 'email'
+                            }
                         ]}
                     >
                         <Input />
@@ -58,13 +89,16 @@ function RegistryPage(props) {
                         name="phone"
                         hasFeedback
                         rules={[
+
                             {
                                 required: true,
-                                message: 'Please input your Phone!',
-                            },
+                                pattern: new RegExp(REGEX.PHONE),
+                                message: "Phone invalid"
+                            }
+
                         ]}
                     >
-                        <Input type='number' />
+                        <Input />
                     </Form.Item>
 
 
@@ -77,6 +111,7 @@ function RegistryPage(props) {
                                 required: true,
                                 message: 'Please input your Address!',
                             },
+
                         ]}
                     >
                         <Input />

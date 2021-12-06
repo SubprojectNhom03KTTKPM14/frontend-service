@@ -10,31 +10,44 @@ import HomePage from './pages/HomePage'
 import ProductPage from './pages/ProductPage'
 
 function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Header />
+    const dispatch = useDispatch()
+    useEffect(() => {
+        const fetchProfile = async () => {
+            const token = localStorage.getItem('token')
 
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="account/*" element={<AccountPage />} />
-          <Route path="products" element={<ProductPage />} />
-          <Route path="cart" element={<CartPage />} />
+            if (token) await dispatch(fetchUserProfile())
 
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <AdminPage />
-              </ProtectedRoute>
-            }
-          />
+            setIsFetch(true)
+        }
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
-  )
+        fetchProfile()
+    }, [])
+
+    return (
+        <div className="App">
+            <BrowserRouter>
+                <Header />
+
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="account/*" element={<AccountPage />} />
+                    <Route path="products" element={<ProductPage />} />
+                    <Route path="cart" element={<CartPage />} />
+
+                    <Route
+                        path="/admin"
+                        element={
+                            <ProtectedRoute>
+                                <AdminPage />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </BrowserRouter>
+        </div>
+    )
 }
 
 export default App
