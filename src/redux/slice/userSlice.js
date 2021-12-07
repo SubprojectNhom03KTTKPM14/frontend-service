@@ -42,7 +42,6 @@ export const userSlice = createSlice({
 		},
 		[fetchUserList.rejected]: (state, action) => {
 			state.isLoading = false;
-			state.isLoading = action.payload;
 		},
 	},
 });

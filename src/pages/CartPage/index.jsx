@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import orderApi from "../../api/orderApi";
 import productApi from "../../api/productApi";
 import ItemCart from "../../components/ItemCart";
+import { currencyFormat } from "../../utils/commonUtils";
 import "./CartPage.scss";
 CartPage.propTypes = {};
 
@@ -63,8 +64,8 @@ function CartPage(props) {
 	function success() {
 		Modal.success({
 			content: "Order successed",
-			onOk: () => location.reload(),
-			onCancel: () => location.reload(),
+			onOk: () => window.location.reload(),
+			onCancel: () => window.location.reload(),
 		});
 	}
 
@@ -104,7 +105,9 @@ function CartPage(props) {
 			</div>
 
 			{totalPrice > 0 && (
-				<div className="total-price">Total Price: {totalPrice}</div>
+				<div className="total-price">
+					Total Price: {currencyFormat(totalPrice)}
+				</div>
 			)}
 
 			<div className="cart-button">

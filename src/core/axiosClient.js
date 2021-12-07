@@ -10,21 +10,12 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async (config) => {
-<<<<<<< HEAD
 	const token = localStorage.getItem("accessToken");
 	if (token) {
 		config.headers.Authorization = `${token}`;
 	}
 	return config;
 });
-=======
-    const token = localStorage.getItem('accessToken')
-    if (token) {
-        config.headers.Authorization = `${token}`
-    }
-    return config
-})
->>>>>>> 3a2c18b12e1f0fe01f053bb2d57ddc10eb74f773
 
 axiosClient.interceptors.response.use(
 	(response) => {
