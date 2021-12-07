@@ -1,64 +1,44 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Table, Tag, Space } from 'antd';
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { Table, Tag, Space } from "antd";
+import Column from "antd/lib/table/Column";
+import { useDispatch } from "react-redux";
+import { fetchUserList } from "../../../redux/slice/userSlice";
+import { useSelector } from "react-redux";
 
-UserPane.propTypes = {
-
-};
+UserPane.propTypes = {};
 
 function UserPane(props) {
+	const dispatch = useDispatch();
+	const { userList } = useSelector((state) => state.user);
+	useEffect(() => {
+		dispatch(fetchUserList());
+	}, []);
 
-    const columns = [
-        {
-            title: 'Tên',
-            dataIndex: 'name',
-            key: 'name'
-        },
-        {
-            title: 'Tuổi',
-            dataIndex: 'age',
-            key: 'age',
-        },
-        {
-            title: 'Địa chỉ',
-            dataIndex: 'address',
-            key: 'address',
-        },
-        {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
-        }
-    ];
-
-
-    const data = [
-        {
-            key: '1',
-            name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park',
-            email: 'phuc12@gmail.com'
-        },
-        {
-            key: '2',
-            name: 'Jim Green',
-            age: 42,
-            address: 'London No. 1 Lake Park',
-            email: 'phuc12@gmail.com'
-        },
-        {
-            key: '3',
-            name: 'Joe Black',
-            age: 32,
-            address: 'Sidney No. 1 Lake Park',
-            email: 'phuc12@gmail.com'
-
-        },
-    ];
-    return (
-        <Table columns={columns} dataSource={data} />
-    );
+	return (
+		<Table
+			dataSource={userList}
+			pagination={false}
+			rowKey={(record) => record.id}
+		>
+			<Column title="Tên" dataIndex="name" key="name" />
+			<Column title="Email" dataIndex="email" key="email" />
+			<Column title="SĐT" dataIndex="phone" key="phone" />
+			<Column title="Địa chỉ" dataIndex="address" key="address" />
+			<Column
+				title="Quyền"
+				key="roleType"
+				dataIndex="roleType"
+				render={(_, { roleType }) => {
+					return (
+						<Tag color={roleType === "ADMIN" ? "magenta" : "cyan"}>
+							{roleType}
+						</Tag>
+					);
+				}}
+			/>
+		</Table>
+	);
 }
 
 export default UserPane;
