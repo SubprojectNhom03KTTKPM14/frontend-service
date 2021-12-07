@@ -7,7 +7,6 @@ export const fetchProfile = createAsyncThunk(
     `${KEY}/fetchProfile`,
     async (params, thunkApi) => {
         const data = await userApi.fetchProfile()
-        console.log('data', data)
         return data
     }
 )
@@ -17,7 +16,11 @@ export const userSlice = createSlice({
     initialState: {
         user: null,
     },
-    reducers: {},
+    reducers: {
+        setUser: (state, action) => {
+            state.user = action.payload
+        },
+    },
     extraReducers: {
         [fetchProfile.fulfilled]: (state, action) => {
             state.user = action.payload
@@ -26,6 +29,6 @@ export const userSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-// export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export const { setUser } = userSlice.actions
 
 export default userSlice.reducer

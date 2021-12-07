@@ -13,7 +13,7 @@ CartPage.propTypes = {
 
 function CartPage(props) {
 
-    const [cart, setCart] = useState([{}]);
+    const [cart, setCart] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const { user } = useSelector(state => state.user);
     const navigate = useNavigate();
@@ -95,15 +95,15 @@ function CartPage(props) {
 
     const handleBuy = async () => {
         if (user) {
-            const itemsCart = localStorage.getItem('itemsCart');
-            if (itemsCart) {
-                const tempItemCart = JSON.parse(itemsCart);
-                const currentOrder = tempItemCart.map(ele => (
+            if (cart) {
+                const currentOrder = cart.map(ele => (
                     {
-                        productID: ele.id,
-                        quantity: ele.quanity
+
+                        productID: ele.item.id,
+                        quantity: ele.quantity
                     }
                 ))
+
                 await orderApi.createOrder(currentOrder, user.id).then(() => {
                     success();
                     localStorage.removeItem('itemsCart');
@@ -185,10 +185,12 @@ function CartPage(props) {
                     Total Price: {totalPrice}
                 </div>
             )}
+            {cart.length > 0 && (
+                <div className="cart-button">
+                    <Button type="primary" onClick={handleBuy} >Mua hàng</Button>
+                </div>
+            )}
 
-            <div className="cart-button">
-                <Button type="primary" onClick={handleBuy}>Mua hàng</Button>
-            </div>
 
         </div>
     );

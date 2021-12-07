@@ -9,6 +9,7 @@ import AccountPage from './pages/AccountPage'
 import AdminPage from './pages/AdminPage'
 import CartPage from './pages/CartPage'
 import HomePage from './pages/HomePage'
+import OrderPage from './pages/OrderPage'
 import ProductPage from './pages/ProductPage'
 import { fetchProfile } from './redux/slice/userSlice'
 
@@ -35,11 +36,19 @@ function App() {
                     <Route path="account/*" element={<AccountPage />} />
                     <Route path="products" element={<ProductPage />} />
                     <Route path="cart" element={<CartPage />} />
+                    <Route
+                        path="/orders"
+                        element={
+                            <ProtectedRoute role="/USER">
+                                <OrderPage />
+                            </ProtectedRoute>
+                        }
+                    />
 
                     <Route
                         path="/admin"
                         element={
-                            <ProtectedRoute>
+                            <ProtectedRoute role="/ADMIN">
                                 <AdminPage />
                             </ProtectedRoute>
                         }

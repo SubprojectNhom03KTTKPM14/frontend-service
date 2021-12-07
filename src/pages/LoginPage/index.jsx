@@ -1,6 +1,9 @@
 import { Button, Divider, Form, Input, message, Modal, Typography } from 'antd';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import userApi from '../../api/userApi';
+import { setUser } from '../../redux/slice/userSlice';
 import './LoginPage.scss';
 
 LoginPage.propTypes = {
@@ -9,14 +12,23 @@ LoginPage.propTypes = {
 
 function LoginPage(props) {
     const { Title } = Typography;
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+
 
     const onFinish = async ({ username, password }) => {
         console.log({ username, password })
         await userApi.login(username, password).then(({ accessToken }) => {
             localStorage.setItem('accessToken', accessToken);
-            success()
+        }).then(async () => {
+            await userApi.fetchProfile().then((data) => {
+                dispatch(setUser(data));
 
-        }).catch(() => {
+            });
+            success()
+        }).catch((error) => {
+            console.log('error', error);
             message.error('has an error')
         })
     };
@@ -24,8 +36,8 @@ function LoginPage(props) {
     function success() {
         Modal.success({
             content: 'Login success',
-            // onOk: () => location.reload(),
-            // onCancel: () => location.reload(),
+            onOk: () => navigate('/products'),
+            onCancel: () => navigate('/products'),
         });
     }
 

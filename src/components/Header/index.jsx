@@ -1,4 +1,4 @@
-import { ShopOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import { HomeOutlined, ProfileOutlined, ShopOutlined, ShoppingCartOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -13,21 +13,14 @@ function Header(props) {
 
     const [current, setCurrent] = useState('mail');
     const { user } = useSelector(state => state.user);
-    //  <Avatar size={64} icon={<UserOutlined />} />
 
 
     const handleClick = e => {
-        console.log('click ', e);
         setCurrent(e.key);
         if (e.key === 'LOGOUT') {
             localStorage.removeItem('accessToken');
             location.reload();
         }
-
-
-
-
-        // LOGIN
     };
     return (
         <Menu
@@ -41,6 +34,9 @@ function Header(props) {
         >
 
 
+            <Menu.Item key="HOME" icon={<HomeOutlined />}>
+                <Link to='/' >Home</Link>
+            </Menu.Item>
 
             <Menu.Item key="PRODUCT" icon={<ShopOutlined />}>
                 <Link to='/products' >Products</Link>
@@ -48,6 +44,19 @@ function Header(props) {
             <Menu.Item key="CART" icon={<ShoppingCartOutlined />}>
                 <Link to='/cart' >Cart</Link>
             </Menu.Item>
+
+            {user && (
+                <Menu.Item key="ORDERS" icon={<ProfileOutlined />}>
+                    <Link to='/orders' >Orders</Link>
+                </Menu.Item>
+            )}
+
+            {(user && user.roleType === 'ADMIN') && (
+                <Menu.Item key="ADMIN" icon={<SolutionOutlined />}>
+                    <Link to='/admin' >ADMIN</Link>
+                </Menu.Item>
+            )}
+
 
 
             {user ? (
@@ -68,6 +77,9 @@ function Header(props) {
                     </Menu.Item>
                 </SubMenu>
             )}
+
+
+
 
         </Menu>
     );
