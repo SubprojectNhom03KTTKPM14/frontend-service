@@ -14,6 +14,8 @@ RegistryPage.propTypes = {
 function RegistryPage(props) {
     const { Title } = Typography;
     const navigate = useNavigate();
+
+
     const pushToLogin = () => {
         navigate('/account/login')
     }

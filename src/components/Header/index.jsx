@@ -1,5 +1,5 @@
 import { ShopOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Menu } from 'antd';
+import { Menu } from 'antd';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -18,7 +18,16 @@ function Header(props) {
 
     const handleClick = e => {
         console.log('click ', e);
-        setCurrent(e.key)
+        setCurrent(e.key);
+        if (e.key === 'LOGOUT') {
+            localStorage.removeItem('accessToken');
+            location.reload();
+        }
+
+
+
+
+        // LOGIN
     };
     return (
         <Menu
@@ -31,11 +40,6 @@ function Header(props) {
             }}
         >
 
-            {user && (
-                <Menu.Item key="USER" icon={<ShopOutlined />}>
-                    <Avatar size={64} src='https://joeschmoe.io/api/v1/random' /> {user.name}
-                </Menu.Item>
-            )}
 
 
             <Menu.Item key="PRODUCT" icon={<ShopOutlined />}>
@@ -44,14 +48,27 @@ function Header(props) {
             <Menu.Item key="CART" icon={<ShoppingCartOutlined />}>
                 <Link to='/cart' >Cart</Link>
             </Menu.Item>
-            <SubMenu key="ACCOUNT" icon={<UserOutlined />} title="Account">
-                <Menu.Item key="LOGIN">
-                    <Link to='/account/login' >Login</Link>
-                </Menu.Item>
-                <Menu.Item key="REGISTRY">
-                    <Link to='/account/registry'>Registry</Link>
-                </Menu.Item>
-            </SubMenu>
+
+
+            {user ? (
+
+                <SubMenu key="ACCOUNT" icon={<UserOutlined />} title={user.name}>
+                    <Menu.Item key="LOGOUT" >
+                        Đăng xuất
+                    </Menu.Item>
+                </SubMenu>
+
+            ) : (
+                <SubMenu key="ACCOUNT" icon={<UserOutlined />} title="Account">
+                    <Menu.Item key="LOGIN">
+                        <Link to='/account/login'>Login</Link>
+                    </Menu.Item>
+                    <Menu.Item key="REGISTRY">
+                        <Link to='/account/registry'>Registry</Link>
+                    </Menu.Item>
+                </SubMenu>
+            )}
+
         </Menu>
     );
 }

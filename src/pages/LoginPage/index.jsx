@@ -1,4 +1,4 @@
-import { Button, Divider, Form, Input, message, Typography, Modal } from 'antd';
+import { Button, Divider, Form, Input, message, Modal, Typography } from 'antd';
 import React from 'react';
 import userApi from '../../api/userApi';
 import './LoginPage.scss';
@@ -24,6 +24,8 @@ function LoginPage(props) {
     function success() {
         Modal.success({
             content: 'Login success',
+            // onOk: () => location.reload(),
+            // onCancel: () => location.reload(),
         });
     }
 

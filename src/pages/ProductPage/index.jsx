@@ -1,4 +1,4 @@
-import { Col, Row, Typography, notification } from 'antd';
+import { Col, notification, Pagination, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FilterProduct from '../../components/FilterProduct';
@@ -14,12 +14,12 @@ ProductPage.propTypes = {
 
 function ProductPage(props) {
     const { Title } = Typography;
-    const { products } = useSelector(state => state.product);
+    const { products, totalPages } = useSelector(state => state.product);
     const [query, setQuery] = useState({
         page: 0,
-        size: 12,
+        size: 8,
         sortType: '',
-        ategoryId: ''
+        categoryId: ''
     });
 
 
@@ -27,7 +27,7 @@ function ProductPage(props) {
 
     useEffect(() => {
         dispatch(fetchProducts(query));
-    }, []);
+    }, [query]);
 
 
     const openNotifySucces = () => {
@@ -65,15 +65,28 @@ function ProductPage(props) {
         openNotifySucces();
     }
 
+    const handlePageChange = (page) => {
+        setQuery({ ...query, page: page - 1 })
+
+    }
+
+    const handleOnFilterChange = () => {
+
+    }
+
     return (
         <div id='product-page'>
             <div className="product-page_title">
                 <Title level={1}>PRODUCTS</Title>
             </div>
 
+
             <div className="product-page_filter">
-                <FilterProduct />
+                <FilterProduct
+                    onFilterChange={handleOnFilterChange}
+                />
             </div>
+
 
 
             <div className="product-page_main">
@@ -97,8 +110,13 @@ function ProductPage(props) {
 
                 </div>
 
-
             </div>
+
+            <div className="pagigation">
+                <Pagination onChange={handlePageChange} current={query.page + 1} total={totalPages * 8} />
+            </div>
+
+
         </div>
     );
 }

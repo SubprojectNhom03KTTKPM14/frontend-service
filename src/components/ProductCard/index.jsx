@@ -37,7 +37,7 @@ function ProductCard({ data, onClick }) {
         >
             <div className="product-name">{data.name}</div>
             <div className="product-des">{data.description}</div>
-            <div className="product-price">{data.price.toFixed}</div>
+            <div className="product-price">{data.price}</div>
         </Card>
     );
 }

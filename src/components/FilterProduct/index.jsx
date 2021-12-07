@@ -1,25 +1,54 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import './FilterProduct.scss';
 import { Button, Dropdown, Input, Menu, Select } from 'antd';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCategories } from '../../redux/slice/productSlice';
+import './FilterProduct.scss';
 FilterProduct.propTypes = {
-
+    onFilterChange: PropTypes.func.isRequired,
 };
 
-function FilterProduct(props) {
+function FilterProduct({ onFilterChange }) {
+    const dispatch = useDispatch();
+    const { categories } = useSelector(state => state.product);
+    const [valueType, setValueType] = useState('');
 
-    const handleSelectChange = () => {
 
-    }
     const { Option } = Select;
+    const [sort, setSort] = useState('0');
+
+    const [query, setQuery] = useState({
+        name: '',
+        sortType: '',
+        categoryId: ''
+    })
+
+    useEffect(() => {
+        dispatch(fetchCategories())
+    }, [])
+    const handleSelectChange = (value) => {
+        setValueType(value);
+        setQuery({ ...query, categoryId: value })
+    }
+
+
+    const handleArragePriceClick = ({ key }) => {
+        setSort(key);
+        setQuery({ ...query, sortType: key })
+    }
+    useEffect(() => {
+        if (onFilterChange) {
+            onFilterChange(query);
+        }
+    }, [query])
 
     const menu = (
-        <Menu>
-            <Menu.Item>
-                Gía tăng dần
+        <Menu onClick={handleArragePriceClick}>
+            <Menu.Item key='0'>
+                Ascending
             </Menu.Item>
-            <Menu.Item>
-                Gía giảm dần
+            <Menu.Item key='1'>
+                Descending
             </Menu.Item>
         </Menu>
 
@@ -29,26 +58,25 @@ function FilterProduct(props) {
         <div id='filter-product'>
             <div className="filter-left">
                 <div className="filter-name">
-                    <label htmlFor="">Tên sản phẩm</label>
+                    <label htmlFor="">Name</label>
                     <Input placeholder="Tên sản phẩm" />
                 </div>
 
                 <div className="filter-select">
-                    Loại: &nbsp;
-                    <Select defaultValue="lucy" style={{ width: 120 }} onChange={handleSelectChange}>
-                        <Option value="jack">Jack</Option>
-                        <Option value="lucy">Lucy</Option>
-                        <Option value="disabled" disabled>
-                            Disabled
-                        </Option>
-                        <Option value="Yiminghe">yiminghe</Option>
+                    Category: &nbsp;
+                    <Select style={{ width: 120 }} value={valueType} onChange={handleSelectChange}>
+                        <Option value=''  >Tẩt cả</Option>
+                        {categories.map((ele, index) => (
+                            <Option value={ele.id} key={index} >{ele.name}</Option>
+                        ))}
+
                     </Select>
                 </div>
             </div>
 
             <div className="filter-right">
-                Sắp xếp theo:&nbsp;<Dropdown overlay={menu} placement="bottomLeft">
-                    <Button>Gía tăng dần</Button>
+                Sort by:&nbsp;<Dropdown overlay={menu} placement="bottomLeft">
+                    <Button>{sort === '1' ? 'Descending' : 'Ascending'}</Button>
                 </Dropdown>
             </div>
         </div>

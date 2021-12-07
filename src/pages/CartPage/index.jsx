@@ -1,5 +1,9 @@
-import { Button, Typography } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Button, message, Modal, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import orderApi from '../../api/orderApi';
 import productApi from '../../api/productApi';
 import ItemCart from '../../components/ItemCart';
 import './CartPage.scss';
@@ -11,6 +15,8 @@ function CartPage(props) {
 
     const [cart, setCart] = useState([{}]);
     const [totalPrice, setTotalPrice] = useState(0);
+    const { user } = useSelector(state => state.user);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCart = async () => {
@@ -37,15 +43,63 @@ function CartPage(props) {
 
     useEffect(() => {
         if (cart.length > 0) {
-            // const total = cart.reduce((pre, cur) => {
-            //     const preTemp = pre?.item.price || 0;
-            //     const curTemp = cur.item.price;
-            //     console.log('preTemp', preTemp);
-            //     console.log('curTemp', curTemp);
-            // })
-            // console.log()
+            let tempPrice = 0;
+            cart.forEach(ele => {
+                if (Object.keys(ele).length > 0) {
+                    const priceItem = ele.item.price * ele.quantity;
+                    tempPrice += priceItem;
+                }
+            })
+            setTotalPrice(tempPrice)
         }
-    }, [cart])
+    }, [cart]);
+
+
+    function confirm() {
+        Modal.confirm({
+            icon: <ExclamationCircleOutlined />,
+            content: 'Login to buy..',
+            okText: 'Redirect to login page',
+            cancelText: 'Cancel',
+            onOk: () => navigate('/account/login')
+        });
+    }
+
+    function success() {
+        Modal.success({
+            content: 'Order successed',
+            onOk: () => location.reload(),
+            onCancel: () => location.reload(),
+
+        });
+
+    }
+
+
+
+    const handleBuy = async () => {
+        if (user) {
+            const itemsCart = localStorage.getItem('itemsCart');
+            if (itemsCart) {
+                const tempItemCart = JSON.parse(itemsCart);
+                const currentOrder = tempItemCart.map(ele => (
+                    {
+                        productID: ele.id,
+                        quantity: ele.quanity
+                    }
+                ))
+                await orderApi.createOrder(currentOrder, user.id).then(() => {
+                    success();
+                    localStorage.removeItem('itemsCart');
+                }).catch(() => {
+                    message.error('Has a error');
+                })
+            }
+
+        } else {
+            confirm();
+        }
+    }
 
 
 
@@ -61,16 +115,16 @@ function CartPage(props) {
                     <ItemCart data={ele} key={index} />
                 ))}
 
-
-
             </div>
 
-            <div className="total-price">
-                {totalPrice}
-            </div>
+            {totalPrice > 0 && (
+                <div className="total-price">
+                    Total Price: {totalPrice}
+                </div>
+            )}
 
             <div className="cart-button">
-                <Button type="primary">Mua hàng</Button>
+                <Button type="primary" onClick={handleBuy}>Mua hàng</Button>
             </div>
 
         </div>

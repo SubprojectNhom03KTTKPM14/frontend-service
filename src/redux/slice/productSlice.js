@@ -7,7 +7,14 @@ export const fetchProducts = createAsyncThunk(
     `${KEY}/fetchProdcts`,
     async (params, thunkApi) => {
         const data = await productApi.fetchProducts(params)
-        console.log(data)
+        return data
+    }
+)
+
+export const fetchCategories = createAsyncThunk(
+    `${KEY}/fetchCategories`,
+    async (params, thunkApi) => {
+        const data = await productApi.fetchCategories()
         return data
     }
 )
@@ -16,16 +23,20 @@ export const productSlice = createSlice({
     name: 'product',
     initialState: {
         products: [],
-        page: 0,
+        currentPage: 0,
         totalPages: 0,
+        categories: [],
     },
     reducers: {},
     extraReducers: {
         [fetchProducts.fulfilled]: (state, action) => {
-            const { data, page, totalPage } = action.payload
+            const { data, page, totalPages } = action.payload
             state.products = data
-            state.page = page
-            state.totalPage = action.payload
+            state.currentPage = page
+            state.totalPages = totalPages
+        },
+        [fetchCategories.fulfilled]: (state, action) => {
+            state.categories = action.payload
         },
     },
 })
