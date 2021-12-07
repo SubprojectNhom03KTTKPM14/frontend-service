@@ -8,8 +8,15 @@
         flex-direction: column;
     }
 
-    .cart-button {
+    .cart-button,
+    .total-price {
         display: flex;
         flex-direction: row-reverse;
+    }
+    .total-price {
+        font-weight: 500;
+        font-size: 1.6rem;
+        color: #db342e;
+        margin: 2rem 0;
     }
 }

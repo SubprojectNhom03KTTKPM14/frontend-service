@@ -32,6 +32,22 @@ const productApi = {
             file,
         })
     },
+    addCategory: ({ description, name }) => {
+        return axiosClient.post(`${SERVICE_URL}/categories}`, {
+            description,
+            name,
+        })
+    },
+
+    fetchCategories: () => {
+        return axiosClient.get(`${SERVICE_URL}/categories`)
+    },
+    fetchCategorById: (categoryId) => {
+        return axiosClient.get(`${SERVICE_URL}/categories/${categoryId}}`)
+    },
+    deleteCategorById: (categoryId) => {
+        return axiosClient.delete(`${SERVICE_URL}/categories/${categoryId}}`)
+    },
 }
 
 export default productApi

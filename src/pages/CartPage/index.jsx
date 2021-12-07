@@ -1,80 +1,119 @@
-import { Button, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
-import productApi from '../../api/productApi';
-import ItemCart from '../../components/ItemCart';
-import './CartPage.scss';
-CartPage.propTypes = {
-
-};
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { Button, message, Modal, Typography } from "antd";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import orderApi from "../../api/orderApi";
+import productApi from "../../api/productApi";
+import ItemCart from "../../components/ItemCart";
+import "./CartPage.scss";
+CartPage.propTypes = {};
 
 function CartPage(props) {
+	const [cart, setCart] = useState([{}]);
+	const [totalPrice, setTotalPrice] = useState(0);
+	const { user } = useSelector((state) => state.user);
+	const navigate = useNavigate();
 
-    const [cart, setCart] = useState([{}]);
-    const [totalPrice, setTotalPrice] = useState(0);
+	useEffect(() => {
+		const fetchCart = async () => {
+			const itemsCart = localStorage.getItem("itemsCart");
+			let tempCart = [];
+			if (itemsCart) {
+				const tempItemCart = JSON.parse(itemsCart);
 
-    useEffect(() => {
-        const fetchCart = async () => {
-            const itemsCart = localStorage.getItem('itemsCart');
-            let tempCart = [];
-            if (itemsCart) {
-                const tempItemCart = JSON.parse(itemsCart);
+				for (const ele of tempItemCart) {
+					const data = await productApi.fetchProductById(ele.id);
+					const tempItem = {
+						item: data,
+						quantity: ele.quantity,
+					};
+					tempCart.push(tempItem);
+				}
+			}
+			setCart(tempCart);
+		};
 
-                for (const ele of tempItemCart) {
-                    const data = await productApi.fetchProductById(ele.id);
-                    const tempItem = {
-                        item: data,
-                        quantity: ele.quantity
-                    }
-                    tempCart.push(tempItem);
-                }
-            }
-            setCart(tempCart)
-        }
+		fetchCart();
+	}, []);
 
-        fetchCart();
+	useEffect(() => {
+		if (cart.length > 0) {
+			let tempPrice = 0;
+			cart.forEach((ele) => {
+				if (Object.keys(ele).length > 0) {
+					const priceItem = ele.item.price * ele.quantity;
+					tempPrice += priceItem;
+				}
+			});
+			setTotalPrice(tempPrice);
+		}
+	}, [cart]);
 
-    }, []);
+	function confirm() {
+		Modal.confirm({
+			icon: <ExclamationCircleOutlined />,
+			content: "Login to buy..",
+			okText: "Redirect to login page",
+			cancelText: "Cancel",
+			onOk: () => navigate("/account/login"),
+		});
+	}
 
-    useEffect(() => {
-        if (cart.length > 0) {
-            // const total = cart.reduce((pre, cur) => {
-            //     const preTemp = pre?.item.price || 0;
-            //     const curTemp = cur.item.price;
-            //     console.log('preTemp', preTemp);
-            //     console.log('curTemp', curTemp);
-            // })
-            // console.log()
-        }
-    }, [cart])
+	function success() {
+		Modal.success({
+			content: "Order successed",
+			onOk: () => location.reload(),
+			onCancel: () => location.reload(),
+		});
+	}
 
+	const handleBuy = async () => {
+		if (user) {
+			const itemsCart = localStorage.getItem("itemsCart");
+			if (itemsCart) {
+				const tempItemCart = JSON.parse(itemsCart);
+				const currentOrder = tempItemCart.map((ele) => ({
+					productID: ele.id,
+					quantity: ele.quanity,
+				}));
+				await orderApi
+					.createOrder(currentOrder, user.id)
+					.then(() => {
+						success();
+						localStorage.removeItem("itemsCart");
+					})
+					.catch(() => {
+						message.error("Has a error");
+					});
+			}
+		} else {
+			confirm();
+		}
+	};
 
+	const { Title } = Typography;
+	return (
+		<div id="cart-page">
+			<Title level={2}>Giỏ Hàng</Title>
 
+			<div className="cart_wrapper">
+				{cart.map((ele, index) => (
+					<ItemCart data={ele} key={index} />
+				))}
+			</div>
 
-    const { Title } = Typography;
-    return (
-        <div id='cart-page'>
-            <Title level={2}>Giỏ Hàng</Title>
+			{totalPrice > 0 && (
+				<div className="total-price">Total Price: {totalPrice}</div>
+			)}
 
-            <div className="cart_wrapper">
-
-                {cart.map((ele, index) => (
-                    <ItemCart data={ele} key={index} />
-                ))}
-
-
-
-            </div>
-
-            <div className="total-price">
-                {totalPrice}
-            </div>
-
-            <div className="cart-button">
-                <Button type="primary">Mua hàng</Button>
-            </div>
-
-        </div>
-    );
+			<div className="cart-button">
+				<Button type="primary" onClick={handleBuy}>
+					Mua hàng
+				</Button>
+			</div>
+		</div>
+	);
 }
 
 export default CartPage;
