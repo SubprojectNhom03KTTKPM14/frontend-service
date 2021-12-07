@@ -1,14 +1,20 @@
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import './ItemCart.scss';
 
 ItemCart.propTypes = {
-
+    data: PropTypes.object,
+};
+ItemCart.defaultProps = {
+    data: {},
 };
 
-function ItemCart(props) {
+function ItemCart({ data }) {
 
     const [quantity, setQuantity] = useState(0);
+    console.log('dâta', data);
+
 
 
     const handleQuantityChange = (e) => {
@@ -26,16 +32,16 @@ function ItemCart(props) {
             <div className="item-info">
 
                 <div className="item-img">
-                    <img src="https://static2.yan.vn/YanNews/2167221/202011/le-bong-la-ai-tieu-su-doi-tu-su-nghiep-cua-co-057d0b59-4eceb02c.png" alt="" />
+                    <img src={data.item?.image} />
                 </div>
 
                 <div className="item-info-name">
-                    Lê bống
+                    {data.item?.name}
                 </div>
             </div>
 
             <div className="item-price">
-                1200000
+                {data.item?.price}
             </div>
 
             <div className="item-counter">
@@ -52,12 +58,14 @@ function ItemCart(props) {
 
                 <div className="item-count_quantity">
                     <input
-                        onBlur={handleOnBlur}
-                        onChange={handleQuantityChange}
-                        type="number" value={quantity}
+                        // onBlur={handleOnBlur}
+                        // onChange={handleQuantityChange}
+                        type="number"
+                        value={data.quantity}
                     />
-                </div>
 
+
+                </div>
                 <div
                     className="item-count_plus"
                     onClick={() => setQuantity(quantity + 1)}

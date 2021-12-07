@@ -3,11 +3,18 @@ import axiosClient from '../core/axiosClient'
 const SERVICE_URL = '/product-service'
 
 const productApi = {
-    fetchProducts: (page, size, sortType, categoryId) => {
-        return axiosClient.get(`${SERVICE_URL}/products`)
+    fetchProducts: ({ page, size, sortType, categoryId }) => {
+        return axiosClient.get(`${SERVICE_URL}/products`, {
+            params: {
+                page,
+                size,
+                sortType,
+                categoryId,
+            },
+        })
     },
     fetchProductById: (productId) => {
-        return axiosClient.get(`${SERVICE_URL}/products${productId}`)
+        return axiosClient.get(`${SERVICE_URL}/products/${productId}`)
     },
     addProduct: (categoryId, description, name, price) => {
         return axiosClient.post(`${SERVICE_URL}/admin`, {

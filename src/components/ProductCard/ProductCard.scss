@@ -1,0 +1,17 @@
+.product-name,
+.product-des,
+.product-price {
+    margin-bottom: 1rem;
+}
+.product-name {
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+.product-price {
+    color: #db342e;
+    font-weight: 500;
+}
+.product-price::after {
+    content: " VND";
+}

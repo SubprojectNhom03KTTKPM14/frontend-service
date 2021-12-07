@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import Header from './components/Header'
@@ -8,19 +10,19 @@ import AdminPage from './pages/AdminPage'
 import CartPage from './pages/CartPage'
 import HomePage from './pages/HomePage'
 import ProductPage from './pages/ProductPage'
+import { fetchProfile } from './redux/slice/userSlice'
 
 function App() {
     const dispatch = useDispatch()
+    const { user } = useSelector((state) => state.user)
     useEffect(() => {
-        const fetchProfile = async () => {
-            const token = localStorage.getItem('token')
+        const fetchMyProfile = async () => {
+            const token = localStorage.getItem('accessToken')
 
-            if (token) await dispatch(fetchUserProfile())
-
-            setIsFetch(true)
+            if (token) await dispatch(fetchProfile())
         }
 
-        fetchProfile()
+        fetchMyProfile()
     }, [])
 
     return (

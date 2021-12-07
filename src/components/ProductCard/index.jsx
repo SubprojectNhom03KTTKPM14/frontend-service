@@ -2,26 +2,42 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
+import './ProductCard.scss';
+
 
 ProductCard.propTypes = {
-
+    data: PropTypes.object,
+    onClick: PropTypes.func,
 };
 
-function ProductCard(props) {
+ProductCard.defaultProps = {
+    data: {},
+    onClick: null
+};
+
+function ProductCard({ data, onClick }) {
+
+
+    const handleOnClick = () => {
+        if (onClick) {
+            onClick(data);
+        }
+    }
+
     return (
         <Card
             hoverable
-            cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
+            cover={<img alt="example" src={data.image} />}
             actions={[
-                <div>
+                <div onClick={handleOnClick}>
                     <ShoppingCartOutlined key='add_to_cart' /> Thêm vào giỏ hàng
                 </div>
             ]}
-        // style={{ height: '200px' }}
+            style={{ minHeight: '500px' }}
         >
-            <div className="product-name">Tên</div>
-            <div className="product-des">Mô tả</div>
-            <div className="product-price">Gía</div>
+            <div className="product-name">{data.name}</div>
+            <div className="product-des">{data.description}</div>
+            <div className="product-price">{data.price.toFixed}</div>
         </Card>
     );
 }

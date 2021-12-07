@@ -1,4 +1,4 @@
-import { Button, Divider, Form, Input, message, Typography } from 'antd';
+import { Button, Divider, Form, Input, message, Typography, Modal } from 'antd';
 import React from 'react';
 import userApi from '../../api/userApi';
 import './LoginPage.scss';
@@ -11,12 +11,23 @@ function LoginPage(props) {
     const { Title } = Typography;
 
     const onFinish = async ({ username, password }) => {
+        console.log({ username, password })
         await userApi.login(username, password).then(({ accessToken }) => {
-            localStorage.setItem('accessToken', accessToken)
+            localStorage.setItem('accessToken', accessToken);
+            success()
+
         }).catch(() => {
             message.error('has an error')
         })
     };
+
+    function success() {
+        Modal.success({
+            content: 'Login success',
+        });
+    }
+
+
 
 
 

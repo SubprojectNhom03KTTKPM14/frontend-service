@@ -5,11 +5,11 @@ import cartReducer from '../redux/slice/cartSlice'
 import userReducer from '../redux/slice/userSlice'
 
 const initalReducer = {
-  product: productReducer,
-  user: cartReducer,
-  cart: userReducer,
+    product: productReducer,
+    user: userReducer,
+    cart: cartReducer,
 }
 
 export const store = configureStore({
-  reducer: initalReducer,
+    reducer: initalReducer,
 })

@@ -24,6 +24,9 @@ const userApi = {
             name,
         })
     },
+    fetchProfile: () => {
+        return axiosClient.get(`${SERVICE_URL}/users/me`)
+    },
 }
 
 export default userApi
