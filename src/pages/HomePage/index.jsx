@@ -7,23 +7,24 @@ function HomePage(props) {
     const data = [
         {
             title: 'Huỳnh Anh Tiên',
-            role: ["ABC", "SYZ"]
+            mssv: '18065341'
         },
         {
             title: 'Nguyễn Trần Nhật Hào',
-            role: ["ABC", "SYZ"]
+            mssv: '18055671'
         },
+
         {
             title: 'Trần Hoàng Phúc',
-            role: ["ABC", "SYZ"]
+            mssv: '18072731'
         },
         {
             title: 'Mai Thanh Trọng',
-            role: ["ABC", "SYZ"]
+            mssv: '18064861'
         },
         {
             title: 'Vũ Văn Khải',
-            role: ["ABC", "SYZ"]
+            mssv: '18068771'
         },
     ];
 
@@ -36,12 +37,9 @@ function HomePage(props) {
                 dataSource={data}
                 renderItem={item => (
                     <List.Item>
-                        <Card title={item.title}  >
-                            <ul>
-                                {item.role.map((ele, index) => (
-                                    <li style={{ textAlign: 'left' }} key={index}>{ele}</li>
-                                ))}
-                            </ul>
+                        <Card   >
+                            <div>Tên : {item.title}</div>
+                            <div>MSSV : {item.mssv}</div>
                         </Card>
 
                     </List.Item>

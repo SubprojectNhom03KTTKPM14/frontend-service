@@ -1,15 +1,14 @@
-import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { Button, message, Modal, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import orderApi from '../../api/orderApi';
-import productApi from '../../api/productApi';
-import ItemCart from '../../components/ItemCart';
-import './CartPage.scss';
-CartPage.propTypes = {
-
-};
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { Button, message, Modal, Typography } from "antd";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import orderApi from "../../api/orderApi";
+import productApi from "../../api/productApi";
+import ItemCart from "../../components/ItemCart";
+import { currencyFormat } from "../../utils/commonUtils";
+import "./CartPage.scss";
+CartPage.propTypes = {};
 
 function CartPage(props) {
 
@@ -182,7 +181,7 @@ function CartPage(props) {
 
             {totalPrice > 0 && (
                 <div className="total-price">
-                    Total Price: {totalPrice}
+                    Total Price: {currencyFormat(totalPrice)}
                 </div>
             )}
             {cart.length > 0 && (

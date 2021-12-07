@@ -20,7 +20,7 @@ function ProductPage(props) {
         size: 8,
         sortType: '',
         categoryId: '',
-        name: ''
+
     });
 
 
@@ -76,7 +76,6 @@ function ProductPage(props) {
             ...query,
             categoryId: tempQuery.categoryId,
             sortType: tempQuery.sortType,
-            name: tempQuery.name
         })
     }
 

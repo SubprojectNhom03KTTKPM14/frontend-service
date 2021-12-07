@@ -1,15 +1,11 @@
-import { Button, Divider, Form, Input, Modal, Typography, message } from 'antd';
-import React from 'react';
-import userApi from '../../api/userApi';
-import REGEX from '../../constant/regex';
-import { useNavigate } from 'react-router-dom';
-import './RegistryPage.scss';
+import { Button, Divider, Form, Input, Modal, Typography, message } from "antd";
+import React from "react";
+import userApi from "../../api/userApi";
+import REGEX from "../../constant/regex";
+import { useNavigate } from "react-router-dom";
+import "./RegistryPage.scss";
 
-
-
-RegistryPage.propTypes = {
-
-};
+RegistryPage.propTypes = {};
 
 function RegistryPage(props) {
     const { Title } = Typography;

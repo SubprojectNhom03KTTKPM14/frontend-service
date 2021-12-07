@@ -1,6 +1,8 @@
+
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { currencyFormat } from "../../utils/commonUtils";
 import './ItemCart.scss';
 
 ItemCart.propTypes = {
@@ -9,6 +11,7 @@ ItemCart.propTypes = {
     onCouterDecrease: PropTypes.func.isRequired,
     onInputChange: PropTypes.func.isRequired,
     onDeleteItem: PropTypes.func.isRequired,
+
 
 };
 ItemCart.defaultProps = {
@@ -60,7 +63,7 @@ function ItemCart({
             </div>
 
             <div className="item-price">
-                {data.item?.price}
+                {currencyFormat(data.item?.price)}
             </div>
 
             <div className="item-counter">

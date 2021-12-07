@@ -18,7 +18,6 @@ function FilterProduct({ onFilterChange }) {
     const [sort, setSort] = useState('0');
 
     const [query, setQuery] = useState({
-        name: '',
         sortType: '',
         categoryId: ''
     })
@@ -57,10 +56,6 @@ function FilterProduct({ onFilterChange }) {
 
         <div id='filter-product'>
             <div className="filter-left">
-                <div className="filter-name">
-                    <label htmlFor="">Name</label>
-                    <Input placeholder="Tên sản phẩm" />
-                </div>
 
                 <div className="filter-select">
                     Category: &nbsp;

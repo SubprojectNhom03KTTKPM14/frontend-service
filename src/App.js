@@ -39,7 +39,7 @@ function App() {
                     <Route
                         path="/orders"
                         element={
-                            <ProtectedRoute role="/USER">
+                            <ProtectedRoute role="USER">
                                 <OrderPage />
                             </ProtectedRoute>
                         }
@@ -48,7 +48,7 @@ function App() {
                     <Route
                         path="/admin"
                         element={
-                            <ProtectedRoute role="/ADMIN">
+                            <ProtectedRoute role="ADMIN">
                                 <AdminPage />
                             </ProtectedRoute>
                         }

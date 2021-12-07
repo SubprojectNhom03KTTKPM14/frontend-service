@@ -2,6 +2,8 @@ import { Table, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import orderApi from '../../api/orderApi';
+import { currencyFormat } from "../../utils/commonUtils";
+
 import './OrderPage.scss';
 
 OrderPage.propTypes = {
@@ -51,7 +53,7 @@ function OrderPage(props) {
             render: products => (
                 <div >
                     {products.map((ele, index) => (
-                        <div>{`${ele.product.name} x ${ele.quantity} (${ele.product.price} VND x ${ele.quantity})`}</div>
+                        <div>{`${ele.product.name} x ${ele.quantity} (${currencyFormat(ele.product.price)}  x ${ele.quantity})`}</div>
                     ))}
                 </div>
             )
@@ -63,7 +65,7 @@ function OrderPage(props) {
             render: price => (
 
                 <Tag color='volcano' >
-                    {price} VND
+                    {currencyFormat(price)}
                 </Tag>
 
             ),

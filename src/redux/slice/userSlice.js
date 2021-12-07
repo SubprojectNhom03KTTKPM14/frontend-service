@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import userApi from '../../api/userApi'
 
 const KEY = 'user'
@@ -11,10 +11,20 @@ export const fetchProfile = createAsyncThunk(
     }
 )
 
+export const fetchUserList = createAsyncThunk(
+    `${KEY}/fetchUserList`,
+    async (params, thunkApi) => {
+        const data = await userApi.fetchUser()
+        return data
+    }
+)
+
 export const userSlice = createSlice({
     name: 'user',
     initialState: {
         user: null,
+        userList: [],
+        isLoading: false,
     },
     reducers: {
         setUser: (state, action) => {
@@ -24,6 +34,18 @@ export const userSlice = createSlice({
     extraReducers: {
         [fetchProfile.fulfilled]: (state, action) => {
             state.user = action.payload
+        },
+
+        // TODO <================= fetchUserList =================>
+        [fetchUserList.pending]: (state, action) => {
+            state.isLoading = true
+        },
+        [fetchUserList.fulfilled]: (state, action) => {
+            state.isLoading = false
+            state.userList = action.payload
+        },
+        [fetchUserList.rejected]: (state, action) => {
+            state.isLoading = false
         },
     },
 })

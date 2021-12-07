@@ -51,11 +51,6 @@ function Header(props) {
                 </Menu.Item>
             )}
 
-            {(user && user.roleType === 'ADMIN') && (
-                <Menu.Item key="ADMIN" icon={<SolutionOutlined />}>
-                    <Link to='/admin' >ADMIN</Link>
-                </Menu.Item>
-            )}
 
 
 
@@ -65,6 +60,12 @@ function Header(props) {
                     <Menu.Item key="LOGOUT" >
                         Đăng xuất
                     </Menu.Item>
+                    {(user && user.roleType === 'ADMIN') && (
+                        <Menu.Item key="ADMIN" icon={<SolutionOutlined />}>
+                            <Link to='/admin' >Admin</Link>
+                        </Menu.Item>
+                    )}
+
                 </SubMenu>
 
             ) : (
