@@ -26,6 +26,7 @@ export const productSlice = createSlice({
         currentPage: 0,
         totalPages: 0,
         categories: [],
+        isLoading: false,
     },
     reducers: {},
     extraReducers: {
@@ -34,7 +35,16 @@ export const productSlice = createSlice({
             state.products = data
             state.currentPage = page
             state.totalPages = totalPages
+            state.isLoading = false
         },
+
+        [fetchProducts.pending]: (state, action) => {
+            state.isLoading = true
+        },
+        [fetchProducts.rejected]: (state, action) => {
+            state.isLoading = false
+        },
+
         [fetchCategories.fulfilled]: (state, action) => {
             state.categories = action.payload
         },

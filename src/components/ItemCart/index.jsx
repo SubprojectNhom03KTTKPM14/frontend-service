@@ -1,30 +1,49 @@
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import './ItemCart.scss';
 
 ItemCart.propTypes = {
     data: PropTypes.object,
+    onCounterIncrease: PropTypes.func.isRequired,
+    onCouterDecrease: PropTypes.func.isRequired,
+    onInputChange: PropTypes.func.isRequired,
+    onDeleteItem: PropTypes.func.isRequired,
+
 };
 ItemCart.defaultProps = {
     data: {},
 };
 
-function ItemCart({ data }) {
+function ItemCart({
+    data,
+    onCouterDecrease,
+    onCounterIncrease,
+    onInputChange,
+    onDeleteItem
+}) {
 
-    const [quantity, setQuantity] = useState(0);
-    console.log('dâta', data);
 
 
 
     const handleQuantityChange = (e) => {
-        setQuantity(e.target.value)
+        const value = e.target.value;
+        const number = parseInt(value);
+        console.log('value', value);
+
+        if (!isNaN(number)) {
+            console.log('number', number);
+
+            if (number > 0) {
+                onInputChange(number, data.item.id)
+            }
+        }
+
+        // handleInputChange
     }
 
-    const handleOnBlur = () => {
-        if (!quantity) {
-            setQuantity(0);
-        }
+    const handleOnClickDelete = () => {
+        onDeleteItem(data.item.id)
     }
 
     return (
@@ -48,8 +67,8 @@ function ItemCart({ data }) {
                 <div
                     className="item-count_minus"
                     onClick={() => {
-                        if (quantity > 0) {
-                            setQuantity(quantity - 1)
+                        if (data.quantity > 0) {
+                            onCouterDecrease(data.item.id);
                         }
                     }}
                 >
@@ -58,8 +77,7 @@ function ItemCart({ data }) {
 
                 <div className="item-count_quantity">
                     <input
-                        // onBlur={handleOnBlur}
-                        // onChange={handleQuantityChange}
+                        onChange={handleQuantityChange}
                         type="number"
                         value={data.quantity}
                     />
@@ -68,14 +86,14 @@ function ItemCart({ data }) {
                 </div>
                 <div
                     className="item-count_plus"
-                    onClick={() => setQuantity(quantity + 1)}
+                    onClick={() => onCounterIncrease(data.item.id)}
                 >
                     <PlusOutlined />
                 </div>
             </div>
 
             <div className="action-delete">
-                <DeleteOutlined />
+                <DeleteOutlined onClick={handleOnClickDelete} />
             </div>
         </div>
     );

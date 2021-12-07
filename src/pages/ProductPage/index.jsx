@@ -1,4 +1,4 @@
-import { Col, notification, Pagination, Row, Typography } from 'antd';
+import { Col, notification, Pagination, Row, Spin, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FilterProduct from '../../components/FilterProduct';
@@ -14,12 +14,13 @@ ProductPage.propTypes = {
 
 function ProductPage(props) {
     const { Title } = Typography;
-    const { products, totalPages } = useSelector(state => state.product);
+    const { products, totalPages, isLoading } = useSelector(state => state.product);
     const [query, setQuery] = useState({
         page: 0,
         size: 8,
         sortType: '',
-        categoryId: ''
+        categoryId: '',
+        name: ''
     });
 
 
@@ -70,54 +71,61 @@ function ProductPage(props) {
 
     }
 
-    const handleOnFilterChange = () => {
-
+    const handleOnFilterChange = (tempQuery) => {
+        setQuery({
+            ...query,
+            categoryId: tempQuery.categoryId,
+            sortType: tempQuery.sortType,
+            name: tempQuery.name
+        })
     }
 
     return (
-        <div id='product-page'>
-            <div className="product-page_title">
-                <Title level={1}>PRODUCTS</Title>
-            </div>
+        <Spin spinning={isLoading}>
+            <div id='product-page'>
+                <div className="product-page_title">
+                    <Title level={1}>PRODUCTS</Title>
+                </div>
 
 
-            <div className="product-page_filter">
-                <FilterProduct
-                    onFilterChange={handleOnFilterChange}
-                />
-            </div>
+                <div className="product-page_filter">
+                    <FilterProduct
+                        onFilterChange={handleOnFilterChange}
+                    />
+                </div>
 
 
 
-            <div className="product-page_main">
+                <div className="product-page_main">
 
 
-                <div className="product-page_list">
+                    <div className="product-page_list">
 
-                    <Row gutter={[16, 16]}>
+                        <Row gutter={[16, 16]}>
 
-                        {products.map((product, index) => (
-                            <Col span={6} >
-                                <ProductCard
-                                    key={index}
-                                    data={product}
-                                    onClick={handlePushToCart}
-                                />
-                            </Col>
-                        ))}
+                            {products.map((product, index) => (
+                                <Col span={6} >
+                                    <ProductCard
+                                        key={index}
+                                        data={product}
+                                        onClick={handlePushToCart}
+                                    />
+                                </Col>
+                            ))}
 
-                    </Row>
+                        </Row>
+
+                    </div>
 
                 </div>
 
+                <div className="pagigation">
+                    <Pagination onChange={handlePageChange} current={query.page + 1} total={totalPages * 8} />
+                </div>
+
+
             </div>
-
-            <div className="pagigation">
-                <Pagination onChange={handlePageChange} current={query.page + 1} total={totalPages * 8} />
-            </div>
-
-
-        </div>
+        </Spin>
     );
 }
 

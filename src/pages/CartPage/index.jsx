@@ -50,9 +50,25 @@ function CartPage(props) {
                     tempPrice += priceItem;
                 }
             })
-            setTotalPrice(tempPrice)
+            setTotalPrice(tempPrice);
+        } else {
+            setTotalPrice(0);
         }
     }, [cart]);
+
+
+    useEffect(() => {
+        saveToLocalStorage(cart)
+    }, [cart])
+
+    function saveToLocalStorage(newCart) {
+
+        const tempCart = newCart.map(ele => ({
+            id: ele.item?.id,
+            quantity: ele.quantity
+        }))
+        localStorage.setItem('itemsCart', JSON.stringify(tempCart));
+    }
 
 
     function confirm() {
@@ -101,7 +117,48 @@ function CartPage(props) {
         }
     }
 
+    const handleOnCounterIncrease = (id) => {
+        const index = cart.findIndex(ele => ele.item.id === id);
+        let tempCart = [...cart];
+        tempCart[index].quantity = tempCart[index].quantity + 1;
+        setCart(tempCart);
 
+    }
+
+    const handleOnCouterDecrease = (id) => {
+        const index = cart.findIndex(ele => ele.item.id === id);
+        let tempCart = [...cart];
+
+        if (tempCart[index].quantity === 1) {
+            handleOnDeleteItem(id);
+        } else {
+            tempCart[index].quantity = tempCart[index].quantity - 1;
+            setCart(tempCart);
+
+        }
+
+
+    }
+
+
+
+    const handleInputChange = (number, id) => {
+        const index = cart.findIndex(ele => ele.item.id === id);
+        let tempCart = [...cart];
+        tempCart[index].quantity = number;
+        setCart(tempCart);
+
+
+
+    }
+
+
+    const handleOnDeleteItem = (id) => {
+        const tempCart = cart.filter(ele => ele.item.id !== id);
+        setCart(tempCart);
+
+
+    }
 
 
     const { Title } = Typography;
@@ -112,7 +169,13 @@ function CartPage(props) {
             <div className="cart_wrapper">
 
                 {cart.map((ele, index) => (
-                    <ItemCart data={ele} key={index} />
+                    <ItemCart
+                        data={ele} key={index}
+                        onCounterIncrease={handleOnCounterIncrease}
+                        onCouterDecrease={handleOnCouterDecrease}
+                        onInputChange={handleInputChange}
+                        onDeleteItem={handleOnDeleteItem}
+                    />
                 ))}
 
             </div>
